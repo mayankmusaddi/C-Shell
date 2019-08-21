@@ -71,6 +71,7 @@ If no pid is mentioned then it gives the Info for the current shell process.
 
 # Directory Structure
 
+```
 .
 |
 +-- src
@@ -86,7 +87,7 @@ If no pid is mentioned then it gives the Info for the current shell process.
 +-- include
     +-- definitions.h
     +-- headers.h
-
+```
 
 # How to Run
 

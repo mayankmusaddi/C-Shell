@@ -1,9 +1,5 @@
 #include "headers.h"
 
-#define MAX_ARG_STRLEN (getpagesize() * 32)
-#define ARG_MAX 20
-// #define ARG_MAX sysconf(_SC_ARG_MAX)
-
 void init()
 {
 	char *username = getlogin();
@@ -62,11 +58,14 @@ void main(int argc, char **argv)
 		shellPrompt();
 
 		char commands[MAX_ARG_STRLEN];
-		scanf("%[^\n]%*c", commands);
+		fgets(commands, MAX_ARG_STRLEN, stdin);
+		if (commands[strlen(commands)-1] == '\n') commands[strlen(commands)-1] = '\0'; // removes last '\n' character from fgets
+
+		store(commands);
 
 		char *com = commands;
-
 		char* command;
+
 		while ((command = strtok_r(com, ";", &com)))
 		{
 			char *args[ARG_MAX] = {NULL};
@@ -104,6 +103,8 @@ void main(int argc, char **argv)
 					ls(len,args);
 				else if(!strcmp(args[0],"pinfo"))
 					pinfo(len,args);
+				else if(!strcmp(args[0],"history"))
+					history(len,args);
 				else if(!strcmp(args[0],"exit") || !strcmp(args[0],"quit"))
 					kill(-getpid(), SIGINT);
 				else

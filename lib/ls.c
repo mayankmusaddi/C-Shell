@@ -35,11 +35,6 @@ void fileDetails(char *path, char *filename)
     printf(" %s", date);
 
     printf(" %s\n",filename);
-
-    // printf("---------------------------\n");
-    // printf("File inode: \t\t%d\n",stats.st_ino);
-    // printf("\n\n");
-    // printf("The file %s a symbolic link\n\n", (S_ISLNK(stats.st_mode)) ? "is" : "is not");
 }
 void ls(int argc, char **argv)
 {
@@ -62,6 +57,8 @@ void ls(int argc, char **argv)
                     flag_a = 1;
             }
         }
+        else if(strcmp(argv[i],"~")==0)
+            dirs[n_dir++]=PATH_HOME;
         else
             dirs[n_dir++]=argv[i];
     }

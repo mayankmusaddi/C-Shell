@@ -14,7 +14,7 @@ void cd(int argc,char **argv)
 	if(argc > 2)
 		printf("bash: cd: too many arguments\n");
 
-	else if(argc==1)
+	else if(argc==1 || strcmp(argv[1],"~")==0)
 		chdir(PATH_HOME);
 
 	else if(chdir(argv[1])!=0)

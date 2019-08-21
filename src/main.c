@@ -53,7 +53,7 @@ void shellPrompt()
 	printf("%s@%s:%s>",USERNAME,SYSNAME,path);
 }
 
-int main(int argc, char **argv)
+void main(int argc, char **argv)
 {
 	init();
 
@@ -61,49 +61,59 @@ int main(int argc, char **argv)
 	{
 		shellPrompt();
 
-		char command[MAX_ARG_STRLEN];
-		gets(command);
+		char commands[MAX_ARG_STRLEN];
+		scanf("%[^\n]%*c", commands);
 
-		char *args[ARG_MAX] = {NULL};
-		char *copy = command;
-		char* token;
-		int flag_bg = 0;
+		char *com = commands;
 
-		int len = 0;
-		while ((token = strtok_r(copy, " ", &copy)))
+		char* command;
+		while ((command = strtok_r(com, ";", &com)))
 		{
-			if(token[0]=='&')
+			char *args[ARG_MAX] = {NULL};
+			char *copy = command;
+			char* token;
+			int flag_bg = 0;
+
+			int len = 0;
+			while ((token = strtok_r(copy, " ", &copy)))
 			{
-				flag_bg = 1;
-				break;
+				if(token[0]=='&')
+				{
+					flag_bg = 1;
+					break;
+				}
+				args[len++] = token;
 			}
-			args[len++] = token;
-		}
+			if(len==0)
+				continue;
 
-		int pid=0;
-
-		if(flag_bg)
-			pid = fork();
-
-		if(pid==0)
-		{
-			if(!strcmp(args[0],"cd"))
-				cd(len,args);
-			else if(!strcmp(args[0],"echo"))
-				echo(len,args);
-			else if(!strcmp(args[0],"pwd"))
-				pwd();
-			else if(!strcmp(args[0],"ls"))
-				ls(len,args);
-			else if(!strcmp(args[0],"pinfo"))
-				pinfo(len,args);
-			else
-				run(len,args);
+			int pid=0;
 
 			if(flag_bg)
+				pid = fork();
+
+			if(pid==0)
 			{
-				printf("%s with pid %d exited normally\n",args[0],getpid());
-				break;
+				if(!strcmp(args[0],"cd"))
+					cd(len,args);
+				else if(!strcmp(args[0],"echo"))
+					echo(len,args);
+				else if(!strcmp(args[0],"pwd"))
+					pwd();
+				else if(!strcmp(args[0],"ls"))
+					ls(len,args);
+				else if(!strcmp(args[0],"pinfo"))
+					pinfo(len,args);
+				else if(!strcmp(args[0],"exit") || !strcmp(args[0],"quit"))
+					kill(-getpid(), SIGINT);
+				else
+					run(len,args);
+
+				if(flag_bg)
+				{
+					printf("%s with pid %d exited normally\n",args[0],getpid());
+					kill(-getpid(), SIGINT);
+				}
 			}
 		}
 	}

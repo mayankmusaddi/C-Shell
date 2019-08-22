@@ -69,6 +69,13 @@ It displays the following:
 
 If no pid is mentioned then it gives the Info for the current shell process.
 
+### History
+One can get the history of all the commands he has ran :
+```
+$ history <no>
+```
+If no number is mentioned it will return last 20 commands that were typed;
+
 # Directory Structure
 
 ```

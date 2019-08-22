@@ -113,7 +113,7 @@ void main(int argc, char **argv)
 				if(flag_bg)
 				{
 					printf("%s with pid %d exited normally\n",args[0],getpid());
-					kill(-getpid(), SIGINT);
+					exit(0);
 				}
 			}
 		}

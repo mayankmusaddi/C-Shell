@@ -47,7 +47,7 @@ void ls(int argc, char **argv)
     int n_dir = 0;
     for(int i=1;i<argc;i++)
     {
-        if(argv[i][0]=='-')
+        if(strlen(argv[i])!=0 && argv[i][0]=='-')
         {
             for(int j=0;j<strlen(argv[i]);j++)
             {
@@ -57,9 +57,9 @@ void ls(int argc, char **argv)
                     flag_a = 1;
             }
         }
-        else if(strcmp(argv[i],"~")==0)
+        else if(!strcmp(argv[i],"~"))
             dirs[n_dir++]=PATH_HOME;
-        else
+        else if(strcmp(argv[i],""))
             dirs[n_dir++]=argv[i];
     }
 

@@ -11,4 +11,5 @@
 #include <grp.h>
 #include <time.h>
 #include <signal.h>
+#include <fcntl.h>
 #include "definitions.h"

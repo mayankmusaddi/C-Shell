@@ -3,11 +3,11 @@
 void run(int argc, char **argv)
 {
     int pid = fork();
-
     if(pid==0)
     {
         execvp(argv[0],argv);
 	    printf("Command not found\n");
+        exit(0);
     }
     else
     {

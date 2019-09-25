@@ -1,0 +1,9 @@
+# NOTED BUGS
+
+1. Exit Button not working after wrong command inputted
+Steps to Reproduce the Bug:
+
+mayank@mayank:~>lssdaf
+Command not found
+mayank@mayank:~>exit
+mayank@mayank:~>

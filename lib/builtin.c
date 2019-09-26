@@ -25,6 +25,11 @@ void echo(int argc,char **argv)
 {
 	// Can improve on '' and "" presence
 	for(int i=1;i<argc;i++)
-		printf("%s ",argv[i]);
+	{
+		if(argv[i][0]=='$')
+			printf("%s ",getenv(argv[i]+1));
+		else
+			printf("%s ",argv[i]);
+	}
 	printf("\n");
 }

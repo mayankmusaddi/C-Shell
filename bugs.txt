@@ -7,3 +7,7 @@ mayank@mayank:~>lssdaf
 Command not found
 mayank@mayank:~>exit
 mayank@mayank:~>
+
+RECTIFIED
+
+2. ls | grep c not working

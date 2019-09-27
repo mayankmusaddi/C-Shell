@@ -1,6 +1,6 @@
 #include "headers.h"
 
-void run(int argc, char **argv)
+void run(int argc, char **argv,int flag_bg)
 {
     int pid = fork();
     if(pid==0)
@@ -12,7 +12,13 @@ void run(int argc, char **argv)
     else
     {
         //Parent Process waiting for child to finish
-        wait(NULL);
+        if(flag_bg)
+        {
+            processNames[++pno] = argv[0];
+            processes[pno] = pid;
+        }
+        else
+            wait(NULL);
         // printf("\nWaiting OVER\n");
     }
 }

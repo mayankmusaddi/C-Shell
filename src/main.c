@@ -59,48 +59,64 @@ int tokenize(char *arr[], char *str, char *ch)
 	return len;
 }
 
+void wait_handler()
+{
+    int status;
+    for (int i=1; i<=pno; i++)
+    {
+		int pid = processes[i];
+        if ( waitpid(pid, &status, WNOHANG) && pid != -1 )
+        {
+			printf("%s with pid %d exited normally\n",processNames[i],pid);
+            processes[i] = -1;
+        }
+    }
+    return;
+}
+
 void execute(int len,char **args,int flag_bg)
 {
-	int pid=0;
-	if(flag_bg)
-		pid = fork();
-	if(pid==0)
-	{
-		if(!strcmp(args[0],"cd"))
-			cd(len,args);
-		else if(!strcmp(args[0],"echo"))
-			echo(len,args);
-		else if(!strcmp(args[0],"pwd"))
-			pwd();
-		else if(!strcmp(args[0],"ls"))
-			ls(len,args);
-		else if(!strcmp(args[0],"pinfo"))
-			pinfo(len,args);
-		else if(!strcmp(args[0],"history"))
-			history(len,args);
-		else if(!strcmp(args[0],"setenv"))
-			set(len,args);
-		else if(!strcmp(args[0],"unsetenv"))
-			unset(len,args);
-		else if(!strcmp(args[0],"exit") || !strcmp(args[0],"quit"))
-			kill(-getpid(), SIGINT);
-		else
-			run(len,args);
-
-		if(flag_bg)
-		{
-			printf("%s with pid %d exited normally\n",args[0],getpid());
-			exit(0);
-		}
-	}
+	if(!strcmp(args[0],"cd"))
+		cd(len,args);
+	else if(!strcmp(args[0],"echo"))
+		echo(len,args);
+	else if(!strcmp(args[0],"pwd"))
+		pwd();
+	else if(!strcmp(args[0],"ls"))
+		ls(len,args);
+	else if(!strcmp(args[0],"pinfo"))
+		pinfo(len,args);
+	else if(!strcmp(args[0],"history"))
+		history(len,args);
+	else if(!strcmp(args[0],"setenv"))
+		set(len,args);
+	else if(!strcmp(args[0],"unsetenv"))
+		unset(len,args);
+	else if(!strcmp(args[0],"jobs"))
+		jobs(len,args);
+	else if(!strcmp(args[0],"kjob"))
+		kjob(len,args);
+	else if(!strcmp(args[0],"fg"))
+		fg(len,args);
+	else if(!strcmp(args[0],"bg"))
+		bg(len,args);
+	else if(!strcmp(args[0],"overkill"))
+		overkill(len,args);
+	else if(!strcmp(args[0],"exit") || !strcmp(args[0],"quit"))
+		kill(-getpid(), SIGINT);
+	else
+		run(len,args,flag_bg);
 }
 
 void main(int argc, char **argv)
 {
 	init();
+	pno = 0;
+	processes[pno] = -1;
 
 	while(1)
 	{
+		signal(SIGCHLD, wait_handler);
 		shellPrompt();
 
 		char statements[MAX_ARG_STRLEN];
@@ -170,70 +186,6 @@ void main(int argc, char **argv)
 					// for(int p=0;p<len;p++)
 						// printf("%s ",args[p]);
 					// printf("command \n");
-					
-				{
-					// int len = tokenize(args,command[k]," ");
-					// if(len==0)
-					// 	continue;
-
-					// printf("NO3 : %d\n",i);						
-					// int failed = 0;
-					// for(int l=0;l<len;l++)
-					// {
-					// 	char *inp[ARG_MAX] = {NULL};
-					// 	int len = tokenize(inp,args[l],"<");
-					// 	if(len==0)
-					// 		continue;
-
-					// 	if( (!strcmp(args[l],"<")) || (!strcmp(args[l],">")) || (!strcmp(args[l],">>")))
-					// 	{
-					// 		if(l == len-1)
-					// 		{
-					// 			perror("syntax error: no redirection io mentioned");
-					// 			failed = 1;
-					// 			break;
-					// 		}
-					// 		else
-					// 		{
-					// 			int fd;
-					// 			if(!strcmp(args[l],"<"))
-					// 				fd = open(args[l+1], O_RDONLY);
-					// 			else if(!strcmp(args[l],">"))
-					// 				fd = open(args[l+1], O_WRONLY | O_TRUNC | O_CREAT ,0644);
-					// 			else
-					// 				fd = open(args[l+1], O_WRONLY | O_APPEND | O_CREAT ,0644);
-	
-                	// 			if(fd < 0)
-                	// 			{
-                	// 			    printf("Cannot access '%s': No such file or directory\n", args[l+1]);
-					// 				failed = 1;
-                	// 			    break;
-                	// 			}
-					// 			else
-					// 			{
-					// 				if(!strcmp(args[l],"<"))
-					// 				{
-					// 					if(dup2(fd, 0)!=0) // 0 refers to stdin
-					// 						perror("dup2 fail");	
-					// 					close(fd);
-					// 				}
-					// 				else
-					// 				{
-					// 					if(dup2(fd, 1)!=1) // 0 refers to stdin
-					// 						perror("dup2 fail");	
-					// 					close(fd);
-					// 				}	
-					// 			}
-					// 			args[l]=args[len-2];args[l+1]=args[len-1];
-					// 			args[len-2]=NULL;args[len-1]=NULL;
-					// 			len-=2;
-					// 		}
-					// 		l-=1;
-					// 	}
-					// }
-					// if(failed)
-					// 	continue;
-				}
 					// printf("NO4 : %d\n",i);
 					execute(len,args,flag_bg);
 				}

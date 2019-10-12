@@ -12,8 +12,8 @@ LDIR =../lib
 _DEPS = headers.h definitions.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ = main.o other.o redirection.o
-_LIB = builtin.o ls.o pinfo.o history.o setunset.o jobs.o kjob.o fgbg.o overkill.o
+_OBJ = main.o other.o redirection.o utilities.o
+_LIB = builtin.o ls.o pinfo.o history.o setunset.o jobs.o kjob.o fgbg.o overkill.o cronjob.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ)) $(patsubst %,$(ODIR)/%,$(_LIB))
 
 $(ODIR)/%.o: %.c $(DEPS)
